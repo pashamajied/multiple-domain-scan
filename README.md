@@ -39,10 +39,5 @@ Skrip ini akan secara otomatis:
 
 Hasil pemindaian akan disimpan dalam direktori masing-masing domain di `/root/pentest/tanngal-bulan-tahun/domain`.
 
-Contoh: `/root/pentest/17-08-1945/github.com`
+Contoh: `/root/pentest/17-08-1945/domain1.com`
 
-## Lisensi
-
-Proyek ini dilisensikan di bawah lisensi MIT - Lihat berkas [LICENSE](LICENSE) untuk lebih lanjut.
-
-Kami sangat menghargai masukan dan kontribusi dari semua pengguna. Jangan ragu untuk membuka isu baru atau mengirimkan permintaan tarik untuk perbaikan atau perbaikan baru yang ingin Anda tambahkan.
