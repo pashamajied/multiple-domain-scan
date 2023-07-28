@@ -14,7 +14,7 @@ curl https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/ins
 
 Perintah ini akan mengunduh skrip `install-first.sh` dari repositori GitHub dan menjalankannya di terminal Anda. Skrip ini akan secara otomatis menginstal alat-alat yang diperlukan seperti `unzip`, `wget`, `curl`, `subfinder`, `httpx`, dan `nuclei` sebelum melanjutkan ke langkah selanjutnya.
 
-## Penggunaan
+### Jalankan
 Setelah instalasi selesai, Anda dapat menggunakan skrip `runm` untuk melakukan scan pada beberapa domain. Skrip ini dapat dijalankan dengan perintah berikut:
 
 ```bash
