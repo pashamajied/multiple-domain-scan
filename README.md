@@ -23,7 +23,7 @@ runm
 
 ### Pemindaian Domain
 
-Setelah instalasi selesai, Anda dapat memindai beberapa domain dengan mudah. Cukup masukkan daftar domain yang ingin Anda pindai, pisahkan dengan spasi, dan ikuti petunjuk pada layar:
+Setelah skrip dijalankan, Anda dapat memindai beberapa domain dengan mudah. Cukup masukkan daftar domain yang ingin Anda pindai, pisahkan dengan spasi, dan ikuti petunjuk pada layar:
 
 ```bash
 Multiple Domain Scan
@@ -37,7 +37,7 @@ Skrip ini akan secara otomatis:
 2. Menyaring dan mengidentifikasi subdomain aktif menggunakan HTTPX.
 3. Melakukan pemindaian kerentanan menggunakan Nuclei untuk subdomain aktif yang ditemukan.
 
-Hasil pemindaian akan disimpan dalam direktori masing-masing domain di `/usr/local/bin/`.
+Hasil pemindaian akan disimpan dalam direktori masing-masing domain di `/root/pentest/`.
 
 ## Lisensi
 
