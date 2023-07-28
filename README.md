@@ -37,7 +37,8 @@ Skrip ini akan secara otomatis:
 2. Menyaring dan mengidentifikasi subdomain aktif menggunakan HTTPX.
 3. Melakukan pemindaian kerentanan menggunakan Nuclei untuk subdomain aktif yang ditemukan.
 
-Hasil pemindaian akan disimpan dalam direktori masing-masing domain di `/root/pentest/`.
+Hasil pemindaian akan disimpan dalam direktori masing-masing domain di `/root/pentest/tanngal-bulan-tahun/domain`.
+contoh: `/root/pentest/17-08-1945/github.com`
 
 ## Lisensi
 
