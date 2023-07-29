@@ -55,10 +55,16 @@ function install_runm() {
 
 # Function to replace placeholders with user input
 function replace_values() {
-  sed -i "s/YOUR_CHAT_ID/$1/g" /usr/local/bin/runm
-  sed -i "s/YOUR_BOT_TOKEN/$2/g" /usr/local/bin/runm
+  if [ ! -w "/usr/local/bin/runm" ]; then
+    echo "Error: Insufficient permissions to edit /usr/local/bin/runm. Please run the script with sudo."
+    exit 1
+  fi
+
+  sudo sed -i "s/YOUR_CHAT_ID/$1/g" /usr/local/bin/runm
+  sudo sed -i "s/YOUR_BOT_TOKEN/$2/g" /usr/local/bin/runm
   echo "YOUR_CHAT_ID and YOUR_BOT_TOKEN have been successfully replaced in the runm file."
 }
+
 
 check_and_install "unzip"
 check_and_install "wget"
