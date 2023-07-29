@@ -4,7 +4,6 @@ VERSION_SUBFINDER="2.6.0"
 VERSION_HTTPX="1.3.3"
 VERSION_NUCLEI="2.9.9"
 
-# Start Function
 # Function to check if a package is installed and install it if needed
 function check_and_install() {
   command -v "$1" &>/dev/null || (sudo apt install -y "$1" || sudo yum install -y "$1" || sudo zypper install -y "$1") && echo "$1 installed successfully."
@@ -37,11 +36,13 @@ function install_runm() {
 
   if [ "$1" == "1" ]; then
     URL="https://tools.pashamajied.com/runm-bot-telegram.txt"
-  elif [ "$2" == "2" ]; then
+  elif [ "$1" == "2" ]; then
     URL="https://tools.pashamajied.com/runm-no-bot-telegram.txt"
   else
-    echo "Invalid choice. Exiting..."
-    exit 1
+    echo "Invalid choice. Please choose either 1 or 2."
+    read -p "Enter your choice (1 or 2): " choice
+    install_runm "$choice"
+    return
   fi
 
   wget "$URL" -O "$DESTINATION"
@@ -55,7 +56,6 @@ function replace_values() {
   sed -i "s/YOUR_CHAT_ID/$1/g" /usr/local/bin/runm
   sed -i "s/YOUR_BOT_TOKEN/$2/g" /usr/local/bin/runm
 }
-# End Function
 
 check_and_install "unzip"
 check_and_install "wget"
@@ -69,16 +69,6 @@ echo "2. Do not send to Telegram bot"
 
 read -p "Enter your choice (1 or 2): " choice
 
-if [ "$choice" == "1" ]; then
-  # Get user input for chat ID and bot token
-  read -p "Enter YOUR_CHAT_ID: " chat_id
-  read -p "Enter YOUR_BOT_TOKEN: " bot_token
-
-  # Call the function to replace the placeholders in the runm file
-  replace_values "$chat_id" "$bot_token"
-
-  echo "YOUR_CHAT_ID and YOUR_BOT_TOKEN have been successfully replaced in the runm file."
-fi
+install_runm "$choice"
 
 download_and_install
-install_runm "$choice"
