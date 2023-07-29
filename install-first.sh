@@ -30,7 +30,7 @@ function download_and_install() {
   echo "All files downloaded and installed successfully."
 }
 
-# Function to install runm based on user choice
+# Function to install runm with or without Telegram bot
 function install_runm() {
   DESTINATION="/usr/local/bin/runm"
 
@@ -38,6 +38,9 @@ function install_runm() {
     URL="https://tools.pashamajied.com/runm-bot-telegram.txt"
     wget "$URL" -O "$DESTINATION"
     chmod +x "$DESTINATION"
+    read -p "Enter YOUR_CHAT_ID: " chat_id
+    read -p "Enter YOUR_BOT_TOKEN: " bot_token
+    replace_values "$chat_id" "$bot_token"
     echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   elif [ "$1" == "2" ]; then
     URL="https://tools.pashamajied.com/runm-no-bot-telegram.txt"
@@ -48,17 +51,12 @@ function install_runm() {
     echo "Invalid choice. Exiting..."
     exit 1
   fi
-
-  # Replace placeholders with user input
-  read -p "Enter YOUR_CHAT_ID: " chat_id
-  read -p "Enter YOUR_BOT_TOKEN: " bot_token
-  replace_values "$chat_id" "$bot_token"
 }
 
 # Function to replace placeholders with user input
 function replace_values() {
-  sed -i "s/YOUR_CHAT_ID/$1/g" /usr/local/bin/runm
-  sed -i "s/YOUR_BOT_TOKEN/$2/g" usr/local/bin/runm
+  sed -i "s/YOUR_CHAT_ID/$1/g" runm
+  sed -i "s/YOUR_BOT_TOKEN/$2/g" runm
   echo "YOUR_CHAT_ID and YOUR_BOT_TOKEN have been successfully replaced in the runm file."
 }
 
