@@ -36,25 +36,30 @@ function install_runm() {
 
   if [ "$1" == "1" ]; then
     URL="https://tools.pashamajied.com/runm-bot-telegram.txt"
+    wget "$URL" -O "$DESTINATION"
+    chmod +x "$DESTINATION"
+    echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   elif [ "$1" == "2" ]; then
     URL="https://tools.pashamajied.com/runm-no-bot-telegram.txt"
+    wget "$URL" -O "$DESTINATION"
+    chmod +x "$DESTINATION"
+    echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   else
-    echo "Invalid choice. Please choose either 1 or 2."
-    read -p "Enter your choice (1 or 2): " choice
-    install_runm "$choice"
-    return
+    echo "Invalid choice. Exiting..."
+    exit 1
   fi
 
-  wget "$URL" -O "$DESTINATION"
-  chmod +x "$DESTINATION"
-
-  echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
+  # Replace placeholders with user input
+  read -p "Enter YOUR_CHAT_ID: " chat_id
+  read -p "Enter YOUR_BOT_TOKEN: " bot_token
+  replace_values "$chat_id" "$bot_token"
 }
 
 # Function to replace placeholders with user input
 function replace_values() {
   sed -i "s/YOUR_CHAT_ID/$1/g" /usr/local/bin/runm
-  sed -i "s/YOUR_BOT_TOKEN/$2/g" /usr/local/bin/runm
+  sed -i "s/YOUR_BOT_TOKEN/$2/g" usr/local/bin/runm
+  echo "YOUR_CHAT_ID and YOUR_BOT_TOKEN have been successfully replaced in the runm file."
 }
 
 check_and_install "unzip"
