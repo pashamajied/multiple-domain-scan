@@ -37,7 +37,7 @@ function install_runm() {
 
   if [ "$1" == "1" ]; then
     URL="https://tools.pashamajied.com/runm-bot-telegram.txt"
-  elif [ "$1" == "2" ]; then
+  elif [ "$2" == "2" ]; then
     URL="https://tools.pashamajied.com/runm-no-bot-telegram.txt"
   else
     echo "Invalid choice. Exiting..."
