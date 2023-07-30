@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 VERSION_SUBFINDER="2.6.0"
 VERSION_HTTPX="1.3.3"
 VERSION_NUCLEI="2.9.9"
