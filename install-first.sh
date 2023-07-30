@@ -18,13 +18,13 @@ function download_and_install() {
     ARCH_SUFFIX="_linux_arm64"
   fi
 
-  wget "https://github.com/projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
-  wget "https://github.com/projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
-  wget "https://github.com/projectdiscovery/nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+  wget -q "https://github.com/projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
+  wget -q "https://github.com/projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
+  wget -q "https://github.com/projectdiscovery/nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
 
-  unzip "subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
-  unzip "httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
-  unzip "nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+  unzip -q "subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
+  unzip -q "httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
+  unzip -q "nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
 
   sudo cp subfinder httpx nuclei /usr/local/bin/
   echo "All files downloaded and installed successfully."
@@ -36,7 +36,7 @@ function install_runm() {
 
   if [ "$choice" == "1" ]; then
     URL="https://tools.pashamajied.com/runm-bot-telegram.txt"
-    wget "$URL" -O "$DESTINATION"
+    wget -q "$URL" -O "$DESTINATION"
     chmod +x "$DESTINATION"
     read -p "Enter YOUR_CHAT_ID: " chat_id
     read -p "Enter YOUR_BOT_TOKEN: " bot_token
@@ -44,7 +44,7 @@ function install_runm() {
     echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   elif [ "$choice" == "2" ]; then
     URL="https://tools.pashamajied.com/runm-no-bot-telegram.txt"
-    wget "$URL" -O "$DESTINATION"
+    wget -q "$URL" -O "$DESTINATION"
     chmod +x "$DESTINATION"
     echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   else
