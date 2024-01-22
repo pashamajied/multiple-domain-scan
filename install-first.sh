@@ -2,9 +2,9 @@
 
 clear
 
-VERSION_SUBFINDER="2.6.0"
-VERSION_HTTPX="1.3.3"
-VERSION_NUCLEI="2.9.9"
+VERSION_SUBFINDER="2.6.4"
+VERSION_HTTPX="1.3.8"
+VERSION_NUCLEI="3.1.6"
 
 # Function to check if a package is installed and install it if needed
 function check_and_install() {
