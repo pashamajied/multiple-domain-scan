@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Set warna untuk output pesan
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+echo "### Scanning Subdomain ### ";
+
+# path to save result subfinder
+USER=$(whoami)
+LOCAL_PATH="/home/$USER/pentest"
+
+read -p "Masukkan daftar domain yang akan di-scan (pisahkan dengan spasi): " domains
+
+# Convert domains into an array
+read -ra DOMAIN_ARRAY <<< "$domains"
+
+for domain in "${DOMAIN_ARRAY[@]}"; do
+  if [ ! -d "$LOCAL_PATH/$domain/" ];
+  then
+    mkdir -p "$LOCAL_PATH/$domain/"
+  fi
+
+  # Menampilkan pesan bahwa proses scanning dimulai
+  echo -e "${GREEN}Running...${NC}"
+  echo ""
+
+  # Menjalankan subdomain enumeration menggunakan subfinder
+  echo -ne "${GREEN}Running subdomain enumeration for domain: $domain...${NC}"
+  subfinder -d "$domain" -o "$LOCAL_PATH/$domain/output_$domain.txt" -silent > /dev/null
+  echo -e "${GREEN} Done.${NC}"
+  echo ""
+
+  # Menjalankan penyaringan subdomain aktif menggunakan httpx
+  echo -ne "${GREEN}Filtering active subdomains for domain: $domain...${NC}"
+  httpx -l "$LOCAL_PATH/$domain/output_$domain.txt" -o "$LOCAL_PATH/$domain/active_$domain.txt" -silent -mc 200 > /dev/null
+  echo -e "${GREEN} Done.${NC}"
+  echo ""
+
+  # Menjalankan vulnerability scanning menggunakan nuclei
+  echo -ne "${GREEN}Scanning for vulnerabilities for domain: $domain...${NC}"
+  nuclei -l "$LOCAL_PATH/$domain/active_$domain.txt" -es info -o "$LOCAL_PATH/$domain/nuclei_$domain.txt" &>/dev/null
+  echo -e "${GREEN} Done.${NC}"
+  echo ""
+
+  echo -e "${GREEN}Scanning $domain selesai!${NC}"
+  echo ""
+
+done
+
