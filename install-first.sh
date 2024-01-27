@@ -91,7 +91,7 @@ function install_runm() {
   DESTINATION="/usr/local/bin/runm"
 
   if [ "$choice" == "1" ]; then
-    URL="https://github.com/pashamajied/multiple-domain-scan/blob/main/runm-bot-telegram.txt"
+    URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-bot-telegram.txt"
     wget -q "$URL" -O "$DESTINATION"
     chmod +x "$DESTINATION"
     read -p "Enter YOUR_CHAT_ID: " chat_id
