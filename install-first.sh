@@ -91,7 +91,7 @@ function install_runm() {
   DESTINATION="/usr/local/bin/runm"
 
   if [ "$choice" == "1" ]; then
-    URL="https://tools.pashamajied.com/runm-bot-telegram.txt"
+    URL="https://github.com/pashamajied/multiple-domain-scan/blob/main/runm-bot-telegram.txt"
     wget -q "$URL" -O "$DESTINATION"
     chmod +x "$DESTINATION"
     read -p "Enter YOUR_CHAT_ID: " chat_id
@@ -99,7 +99,7 @@ function install_runm() {
     replace_values "$chat_id" "$bot_token"
     echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   elif [ "$choice" == "2" ]; then
-    URL="https://tools.pashamajied.com/runm-no-bot-telegram.txt"
+    URL="https://github.com/pashamajied/multiple-domain-scan/blob/main/runm-no-bot-telegram.txt"
     wget -q "$URL" -O "$DESTINATION"
     chmod +x "$DESTINATION"
     echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
