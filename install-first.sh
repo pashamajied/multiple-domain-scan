@@ -13,12 +13,66 @@ function check_and_install() {
 
 # Function to download and install files based on architecture (AMD or ARM)
 function download_and_install() {
+  OS=$(uname -s)
   ARCH=$(uname -m)
-  if [ "$ARCH" == "x86_64" ]; then
-    ARCH_SUFFIX="_linux_amd64"
-  else
-    ARCH_SUFFIX="_linux_arm64"
-  fi
+
+  case "$OS" in
+    "Linux")
+      case "$ARCH" in
+        "i386")
+          ARCH_SUFFIX="_linux_386"
+          ;;
+        "x86_64")
+          ARCH_SUFFIX="_linux_amd64"
+          ;;
+        "arm")
+          ARCH_SUFFIX="_linux_arm"
+          ;;
+        "aarch64")
+          ARCH_SUFFIX="_linux_arm64"
+          ;;
+        *)
+          echo "Unsupported architecture: $ARCH"
+          exit 1
+          ;;
+      esac
+      ;;
+    "Darwin")
+      case "$ARCH" in
+        "x86_64")
+          ARCH_SUFFIX="_macOS_amd64"
+          ;;
+        "arm64")
+          ARCH_SUFFIX="_macOS_arm64"
+          ;;
+        *)
+          echo "Unsupported architecture: $ARCH"
+          exit 1
+          ;;
+      esac
+      ;;
+    "Windows")
+      case "$ARCH" in
+        "i386")
+          ARCH_SUFFIX="_windows_386"
+          ;;
+        "x86_64")
+          ARCH_SUFFIX="_windows_amd64"
+          ;;
+        "arm64")
+          ARCH_SUFFIX="_windows_arm64"
+          ;;
+        *)
+          echo "Unsupported architecture: $ARCH"
+          exit 1
+          ;;
+      esac
+      ;;
+    *)
+      echo "Unsupported operating system: $OS"
+      exit 1
+      ;;
+  esac
 
   wget -q "https://github.com/projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
   wget -q "https://github.com/projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
