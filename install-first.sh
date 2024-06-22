@@ -81,7 +81,7 @@ install_runm() {
   fi
 
   echo "Downloading $URL..."
-  wget "$URL" -O "$DESTINATION"
+  wget -q "$URL" -O "$DESTINATION"
   chmod +x "$DESTINATION"
 
   if [ "$1" == "1" ]; then
