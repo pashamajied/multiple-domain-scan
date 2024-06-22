@@ -53,15 +53,15 @@ download_and_install() {
 
   for FILE in "${FILES[@]}"; do
     echo "Downloading $FILE..."
-    wget "$BASE_URL/$FILE" -P /tmp
+    wget -q "$BASE_URL/$FILE" -P /tmp
   done
 
   echo "Unzipping and installing..."
-  unzip "/tmp/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip" -d /tmp
-  unzip "/tmp/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip" -d /tmp
-  unzip "/tmp/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip" -d /tmp
+  unzip -oq "/tmp/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip" -d /tmp
+  unzip -oq "/tmp/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip" -d /tmp
+  unzip -oq "/tmp/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip" -d /tmp
   tar -xzf "/tmp/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz" -C /tmp
-  unzip "/tmp/cent_$VERSION_CENT$ARCH_SUFFIX.zip" -d /tmp
+  unzip -oq "/tmp/cent_$VERSION_CENT$ARCH_SUFFIX.zip" -d /tmp
 
   sudo cp /tmp/subfinder /tmp/httpx /tmp/nuclei /tmp/gau /tmp/cent /usr/local/bin/
   echo "All files downloaded and installed successfully."
