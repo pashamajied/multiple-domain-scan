@@ -9,62 +9,97 @@ VERSION_NUCLEI="3.2.9"
 VERSION_GAU="2.2.3"
 VERSION_CENT="1.3.4"
 
-# Check and install a package if it's not installed
+# Function to check and install a package if it's not installed
 check_and_install() {
-  command -v "$1" &>/dev/null || sudo apt install -y "$1" || sudo yum install -y "$1" || sudo zypper install -y "$1"
+  if ! command -v "$1" &>/dev/null; then
+    echo "Installing $1..."
+    sudo apt install -y "$1" || sudo yum install -y "$1" || sudo zypper install -y "$1"
+  fi
 }
 
-# Download and install based on architecture
+# Function to download and install based on architecture
 download_and_install() {
-  case "$(uname -s)_$(uname -m)" in
-    Linux_i386)   SUFFIX="_linux_386" ;;
-    Linux_x86_64) SUFFIX="_linux_amd64" ;;
-    Linux_arm)    SUFFIX="_linux_arm" ;;
-    Linux_aarch64)SUFFIX="_linux_arm64" ;;
-    *) echo "Unsupported OS or architecture"; exit 1 ;;
+  OS=$(uname -s)
+  ARCH=$(uname -m)
+
+  case "$OS" in
+    "Linux")
+      case "$ARCH" in
+        "i386") ARCH_SUFFIX="_linux_386" ;;
+        "x86_64") ARCH_SUFFIX="_linux_amd64" ;;
+        "arm") ARCH_SUFFIX="_linux_arm" ;;
+        "aarch64") ARCH_SUFFIX="_linux_arm64" ;;
+        *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+      esac
+      ;;
+    "Darwin")
+      case "$ARCH" in
+        "x86_64") ARCH_SUFFIX="_macOS_amd64" ;;
+        "arm64") ARCH_SUFFIX="_macOS_arm64" ;;
+        *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+      esac
+      ;;
+    *) echo "Unsupported operating system: $OS"; exit 1 ;;
   esac
 
-  BASE_URL="https://github.com"
+  BASE_URL="https://github.com/projectdiscovery"
   FILES=(
-    "projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$SUFFIX.zip"
-    "projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$SUFFIX.zip"
-    "projectdiscovery/nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$SUFFIX.zip"
-    "lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$SUFFIX.tar.gz"
-    "xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$SUFFIX.zip"
+    "subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
+    "httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
+    "nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+    "https://github.com/lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz"
+    "https://github.com/xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$ARCH_SUFFIX.zip"
   )
 
   for FILE in "${FILES[@]}"; do
-    wget -q "$BASE_URL/$FILE" -P /tmp
+    echo "Downloading $FILE..."
+    wget "$BASE_URL/$FILE" -P /tmp
   done
 
-  unzip -q "/tmp/subfinder_$VERSION_SUBFINDER$SUFFIX.zip" -d /tmp
-  unzip -q "/tmp/httpx_$VERSION_HTTPX$SUFFIX.zip" -d /tmp
-  unzip -q "/tmp/nuclei_$VERSION_NUCLEI$SUFFIX.zip" -d /tmp
-  tar -xzf "/tmp/gau_$VERSION_GAU$SUFFIX.tar.gz" -C /tmp
-  unzip -q "/tmp/cent_$VERSION_CENT$SUFFIX.zip" -d /tmp
+  echo "Unzipping and installing..."
+  unzip "/tmp/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip" -d /tmp
+  unzip "/tmp/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip" -d /tmp
+  unzip "/tmp/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip" -d /tmp
+  tar -xzf "/tmp/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz" -C /tmp
+  unzip "/tmp/cent_$VERSION_CENT$ARCH_SUFFIX.zip" -d /tmp
 
   sudo cp /tmp/subfinder /tmp/httpx /tmp/nuclei /tmp/gau /tmp/cent /usr/local/bin/
   echo "All files downloaded and installed successfully."
 }
 
-# Install runm with or without Telegram bot
+# Function to install runm with or without Telegram bot
 install_runm() {
-  URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-${1}-bot-telegram.txt"
-  wget -q "$URL" -O /usr/local/bin/runm
-  chmod +x /usr/local/bin/runm
-  if [ "$1" == "bot" ]; then
+  local DESTINATION="/usr/local/bin/runm"
+  local URL
+
+  if [ "$1" == "1" ]; then
+    URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-bot-telegram.txt"
     read -p "Enter YOUR_CHAT_ID: " chat_id
     read -p "Enter YOUR_BOT_TOKEN: " bot_token
-    sudo sed -i "s/YOUR_CHAT_ID/$chat_id/g; s/YOUR_BOT_TOKEN/$bot_token/g" /usr/local/bin/runm
+  else
+    URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-no-bot-telegram.txt"
   fi
+
+  echo "Downloading $URL..."
+  wget "$URL" -O "$DESTINATION"
+  chmod +x "$DESTINATION"
+
+  if [ "$1" == "1" ]; then
+    sudo sed -i "s/YOUR_CHAT_ID/$chat_id/g; s/YOUR_BOT_TOKEN/$bot_token/g" "$DESTINATION"
+  fi
+
   echo "runm installed successfully."
 }
 
 # Check and install required packages
 for pkg in unzip wget curl; do check_and_install "$pkg"; done
+echo "All required packages are installed."
 
 # Choose option for runm installation
-read -p "Choose option (1. Send to Telegram bot, 2. Do not send to Telegram bot): " choice
-[ "$choice" == "1" ] && install_runm "bot" || install_runm "no"
+echo "Choose one option:"
+echo "1. Send to Telegram bot"
+echo "2. Do not send to Telegram bot"
+read -p "Enter your choice (1 or 2): " choice
 
+install_runm "$choice"
 download_and_install

@@ -9,7 +9,7 @@ Multiple Domain Scan adalah skrip bash sederhana yang digunakan untuk memudahkan
 Anda dapat dengan mudah menginstal dan menjalankan skrip ini dengan menggunakan perintah berikut pada terminal:
 
 ```bash
-wget -q https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/install-first.sh && bash install-first.sh
+wget -q https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/install-first.sh -O - | bash
 ```
 
 Perintah ini akan mengunduh skrip `install-first.sh` dari repositori GitHub dan menjalankannya di terminal Anda. Skrip ini akan secara otomatis menginstal alat-alat yang diperlukan seperti `unzip`, `wget`, `curl`, `subfinder`, `httpx`, dan `nuclei` sebelum melanjutkan ke langkah selanjutnya.
