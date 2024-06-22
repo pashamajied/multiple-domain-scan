@@ -2,138 +2,104 @@
 
 clear
 
-VERSION_SUBFINDER="2.6.4"
-VERSION_HTTPX="1.3.8"
-VERSION_NUCLEI="3.1.6"
+# Version variables
+VERSION_SUBFINDER="2.6.6"
+VERSION_HTTPX="1.6.3"
+VERSION_NUCLEI="3.2.9"
+VERSION_GAU="2.2.3"
+VERSION_CENT="1.3.4"
 
-# Function to check if a package is installed and install it if needed
-function check_and_install() {
-  command -v "$1" &>/dev/null || (sudo apt install -y "$1" || sudo yum install -y "$1" || sudo zypper install -y "$1") && echo "$1 installed successfully."
+# Function to check and install a package if it's not installed
+check_and_install() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Installing $1..."
+    sudo apt install -y "$1" || sudo yum install -y "$1" || sudo zypper install -y "$1"
+  fi
 }
 
-# Function to download and install files based on architecture (AMD or ARM)
-function download_and_install() {
+# Function to download and install based on architecture
+download_and_install() {
   OS=$(uname -s)
   ARCH=$(uname -m)
 
   case "$OS" in
     "Linux")
       case "$ARCH" in
-        "i386")
-          ARCH_SUFFIX="_linux_386"
-          ;;
-        "x86_64")
-          ARCH_SUFFIX="_linux_amd64"
-          ;;
-        "arm")
-          ARCH_SUFFIX="_linux_arm"
-          ;;
-        "aarch64")
-          ARCH_SUFFIX="_linux_arm64"
-          ;;
-        *)
-          echo "Unsupported architecture: $ARCH"
-          exit 1
-          ;;
+        "i386") ARCH_SUFFIX="_linux_386" ;;
+        "x86_64") ARCH_SUFFIX="_linux_amd64" ;;
+        "arm") ARCH_SUFFIX="_linux_arm" ;;
+        "aarch64") ARCH_SUFFIX="_linux_arm64" ;;
+        *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
       esac
       ;;
     "Darwin")
       case "$ARCH" in
-        "x86_64")
-          ARCH_SUFFIX="_macOS_amd64"
-          ;;
-        "arm64")
-          ARCH_SUFFIX="_macOS_arm64"
-          ;;
-        *)
-          echo "Unsupported architecture: $ARCH"
-          exit 1
-          ;;
+        "x86_64") ARCH_SUFFIX="_macOS_amd64" ;;
+        "arm64") ARCH_SUFFIX="_macOS_arm64" ;;
+        *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
       esac
       ;;
-    "Windows")
-      case "$ARCH" in
-        "i386")
-          ARCH_SUFFIX="_windows_386"
-          ;;
-        "x86_64")
-          ARCH_SUFFIX="_windows_amd64"
-          ;;
-        "arm64")
-          ARCH_SUFFIX="_windows_arm64"
-          ;;
-        *)
-          echo "Unsupported architecture: $ARCH"
-          exit 1
-          ;;
-      esac
-      ;;
-    *)
-      echo "Unsupported operating system: $OS"
-      exit 1
-      ;;
+    *) echo "Unsupported operating system: $OS"; exit 1 ;;
   esac
 
-  wget -q "https://github.com/projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
-  wget -q "https://github.com/projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
-  wget -q "https://github.com/projectdiscovery/nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+  BASE_URL="https://github.com/projectdiscovery"
+  FILES=(
+    "subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
+    "httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
+    "nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+    "https://github.com/lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz"
+    "https://github.com/xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$ARCH_SUFFIX.zip"
+  )
 
-  unzip -q "subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
-  unzip -q "httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
-  unzip -q "nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+  for FILE in "${FILES[@]}"; do
+    echo "Downloading $FILE..."
+    wget "$BASE_URL/$FILE" -P /tmp
+  done
 
-  sudo cp subfinder httpx nuclei /usr/local/bin/
+  echo "Unzipping and installing..."
+  unzip "/tmp/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip" -d /tmp
+  unzip "/tmp/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip" -d /tmp
+  unzip "/tmp/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip" -d /tmp
+  tar -xzf "/tmp/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz" -C /tmp
+  unzip "/tmp/cent_$VERSION_CENT$ARCH_SUFFIX.zip" -d /tmp
+
+  sudo cp /tmp/subfinder /tmp/httpx /tmp/nuclei /tmp/gau /tmp/cent /usr/local/bin/
   echo "All files downloaded and installed successfully."
 }
 
 # Function to install runm with or without Telegram bot
-function install_runm() {
-  DESTINATION="/usr/local/bin/runm"
+install_runm() {
+  local DESTINATION="/usr/local/bin/runm"
+  local URL
 
-  if [ "$choice" == "1" ]; then
+  if [ "$1" == "1" ]; then
     URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-bot-telegram.txt"
-    wget -q "$URL" -O "$DESTINATION"
-    chmod +x "$DESTINATION"
     read -p "Enter YOUR_CHAT_ID: " chat_id
     read -p "Enter YOUR_BOT_TOKEN: " bot_token
-    replace_values "$chat_id" "$bot_token"
-    echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
-  elif [ "$choice" == "2" ]; then
-    URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-no-bot-telegram.txt"
-    wget -q "$URL" -O "$DESTINATION"
-    chmod +x "$DESTINATION"
-    echo "The file runm.txt has been downloaded and saved to $DESTINATION with execution permission."
   else
-    echo "Invalid choice. Exiting..."
-    exit 1
-  fi
-}
-
-# Function to replace placeholders with user input
-function replace_values() {
-  if [ ! -w "/usr/local/bin/runm" ]; then
-    echo "Error: Insufficient permissions to edit /usr/local/bin/runm. Please run the script with sudo."
-    exit 1
+    URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-no-bot-telegram.txt"
   fi
 
-  sudo sed -i "s/YOUR_CHAT_ID/$1/g" /usr/local/bin/runm
-  sudo sed -i "s/YOUR_BOT_TOKEN/$2/g" /usr/local/bin/runm
-  echo "YOUR_CHAT_ID and YOUR_BOT_TOKEN have been successfully replaced in the runm file."
+  echo "Downloading $URL..."
+  wget "$URL" -O "$DESTINATION"
+  chmod +x "$DESTINATION"
+
+  if [ "$1" == "1" ]; then
+    sudo sed -i "s/YOUR_CHAT_ID/$chat_id/g; s/YOUR_BOT_TOKEN/$bot_token/g" "$DESTINATION"
+  fi
+
+  echo "runm installed successfully."
 }
 
-
-check_and_install "unzip"
-check_and_install "wget"
-check_and_install "curl"
-
+# Check and install required packages
+for pkg in unzip wget curl; do check_and_install "$pkg"; done
 echo "All required packages are installed."
 
+# Choose option for runm installation
 echo "Choose one option:"
 echo "1. Send to Telegram bot"
 echo "2. Do not send to Telegram bot"
-
 read -p "Enter your choice (1 or 2): " choice
 
 install_runm "$choice"
-
 download_and_install
