@@ -42,13 +42,13 @@ download_and_install() {
     *) echo "Unsupported operating system: $OS"; exit 1 ;;
   esac
 
-  BASE_URL="https://github.com/projectdiscovery"
+  BASE_URL="https://github.com/"
   FILES=(
-    "subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
-    "httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
-    "nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
-    "https://github.com/lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz"
-    "https://github.com/xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$ARCH_SUFFIX.zip"
+    "projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
+    "projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
+    "projectdiscovery/nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
+    "lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz"
+    "xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$ARCH_SUFFIX.zip"
   )
 
   for FILE in "${FILES[@]}"; do
