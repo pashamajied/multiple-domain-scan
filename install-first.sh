@@ -9,12 +9,12 @@ VERSION_NUCLEI="3.2.9"
 VERSION_GAU="2.2.3"
 VERSION_CENT="1.3.4"
 
-# Check and install a package if it's not installed
+# Function to check and install a package if it's not installed
 check_and_install() {
   command -v "$1" &>/dev/null || sudo apt install -y "$1" || sudo yum install -y "$1" || sudo zypper install -y "$1"
 }
 
-# Download and install based on architecture
+# Function to download and install based on architecture
 download_and_install() {
   case "$(uname -s)_$(uname -m)" in
     Linux_i386)   SUFFIX="_linux_386" ;;
@@ -47,7 +47,7 @@ download_and_install() {
   echo "All files downloaded and installed successfully."
 }
 
-# Install runm with or without Telegram bot
+# Function to install runm with or without Telegram bot
 install_runm() {
   URL="https://raw.githubusercontent.com/pashamajied/multiple-domain-scan/main/runm-${1}-bot-telegram.txt"
   wget -q "$URL" -O /usr/local/bin/runm
@@ -61,10 +61,23 @@ install_runm() {
 }
 
 # Check and install required packages
-for pkg in unzip wget curl; do check_and_install "$pkg"; done
+for pkg in unzip wget curl; do
+  check_and_install "$pkg"
+done
 
 # Choose option for runm installation
-read -p "Choose option (1. Send to Telegram bot, 2. Do not send to Telegram bot): " choice
-[ "$choice" == "1" ] && install_runm "bot" || install_runm "no"
+echo "Choose option:"
+echo "1. Send to Telegram bot"
+echo "2. Do not send to Telegram bot"
+read -p "Enter your choice (1 or 2): " choice
+
+if [ "$choice" == "1" ]; then
+  install_runm "bot"
+elif [ "$choice" == "2" ]; then
+  install_runm "no"
+else
+  echo "Invalid choice. Exiting..."
+  exit 1
+fi
 
 download_and_install
