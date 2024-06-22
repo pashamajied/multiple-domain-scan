@@ -90,8 +90,10 @@ read -p "Enter your choice (1 or 2): " choice
 
 if [ "$choice" == "1" ]; then
   install_runm "bot"
+  exit 0
 elif [ "$choice" == "2" ]; then
   install_runm "no"
+  exit 0
 else
   echo "Invalid choice. Exiting..."
   exit 1
