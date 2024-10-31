@@ -3,11 +3,11 @@
 clear
 
 # Version variables
-VERSION_SUBFINDER="2.6.6"
-VERSION_HTTPX="1.6.3"
-VERSION_NUCLEI="3.2.9"
-VERSION_GAU="2.2.3"
-VERSION_CENT="1.3.4"
+VERSION_SUBFINDER="2.6.7"
+VERSION_HTTPX="1.6.9"
+VERSION_NUCLEI="3.3.5"
+#VERSION_GAU="2.2.3"
+#VERSION_CENT="1.3.4"
 
 # Function to check and install a package if it's not installed
 check_and_install() {
@@ -47,8 +47,8 @@ download_and_install() {
     "projectdiscovery/subfinder/releases/download/v$VERSION_SUBFINDER/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip"
     "projectdiscovery/httpx/releases/download/v$VERSION_HTTPX/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip"
     "projectdiscovery/nuclei/releases/download/v$VERSION_NUCLEI/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip"
-    "lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz"
-    "xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$ARCH_SUFFIX.zip"
+    #"lc/gau/releases/download/v$VERSION_GAU/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz"
+    #"xm1k3/cent/releases/download/v$VERSION_CENT/cent_$VERSION_CENT$ARCH_SUFFIX.zip"
   )
 
   for FILE in "${FILES[@]}"; do
@@ -60,8 +60,8 @@ download_and_install() {
   unzip -oq "/tmp/subfinder_$VERSION_SUBFINDER$ARCH_SUFFIX.zip" -d /tmp
   unzip -oq "/tmp/httpx_$VERSION_HTTPX$ARCH_SUFFIX.zip" -d /tmp
   unzip -oq "/tmp/nuclei_$VERSION_NUCLEI$ARCH_SUFFIX.zip" -d /tmp
-  tar -xzf "/tmp/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz" -C /tmp
-  unzip -oq "/tmp/cent_$VERSION_CENT$ARCH_SUFFIX.zip" -d /tmp
+  #tar -xzf "/tmp/gau_$VERSION_GAU$ARCH_SUFFIX.tar.gz" -C /tmp
+  #unzip -oq "/tmp/cent_$VERSION_CENT$ARCH_SUFFIX.zip" -d /tmp
 
   sudo cp /tmp/subfinder /tmp/httpx /tmp/nuclei /tmp/gau /tmp/cent /usr/local/bin/
   echo "All files downloaded and installed successfully."
