@@ -40,7 +40,7 @@ for domain in "${DOMAIN_ARRAY[@]}"; do
 
   # Menjalankan vulnerability scanning menggunakan nuclei
   echo -ne "${GREEN}Scanning for vulnerabilities for domain: $domain...${NC}"
-  nuclei -l "$LOCAL_PATH/$domain/active_$domain.txt" -rl 5 -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12" -t /root/go/bin/cent-nuclei-templates -es info -o "$LOCAL_PATH/$domain/nuclei_$domain.txt" &>/dev/null
+  nuclei -l "$LOCAL_PATH/$domain/active_$domain.txt" -rl 5 -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12" -es info -o "$LOCAL_PATH/$domain/nuclei_$domain.txt" &>/dev/null
   echo -e "${GREEN} Done.${NC}"
   echo ""
 
