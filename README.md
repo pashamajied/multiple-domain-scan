@@ -20,14 +20,13 @@
 
 ---
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Kenapa multiple-domain-scan](#kenapa-multiple-domain-scan)
-- [Prerequisites](#prerequisites)
-- [Instalasi](#instalasi-dan-jalankan)
-- [Output Skrip](#output-skrip)
-
+<p align="center">
+  <a href="#overview">Overview</a> •
+  <a href="#kenapa-multiple-domain-scan">Kenapa multiple-domain-scan</a> •
+  <a href="#prerequisites">Prerequisites</a> •
+  <a href="#instalasi-dan-jalankan">Instalasi</a> •
+  <a href="#output-skrip">Output Skrip</a> 
+</p>
 
 ---
 
