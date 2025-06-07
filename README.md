@@ -24,11 +24,9 @@
 
 - [Overview](#overview)
 - [Kenapa multiple-domain-scan](#kenapa-multiple-domain-scan)
-  - [Prerequisites](#prerequisites)
-  - [Instalasi](#instalasi)
-- [Usage](#usage)
-  - [Jalankan](#jalankan)
-  - [Output Skrip](#output-skrip)
+- [Prerequisites](#prerequisites)
+- [Instalasi](#instalasi-dan-jalankan)
+- [Output Skrip](#output-skrip)
 
 
 ---
